@@ -45,7 +45,7 @@ public class SignupController {
     }
 
     // BindingResultでデータバインドの結果を受け取る
-    // validationの結果はBindingResultクラスに入る    
+    // validationの結果はBindingResultクラスに入る
     @PostMapping("/signup")
     public String postSignUp(@ModelAttribute @Validated SignupForm form, BindingResult bindingResult, Model model) {
 
