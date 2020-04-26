@@ -35,7 +35,9 @@ public class LogAspect {
     // JoinPointにAroundを指定
     // メソッドの実行前後で任意の処理をできる
     // @Around("execution(* *..*.*Controller.*(..))")
-    @Around("bean(*Controller)")
+    // @Around("bean(*Controller)")
+    // @Around("@annotation(org.springframework.web.bind.annotation.GetMapping)") // 指定したアノテーションがついているメソッドを対象
+    @Around("@within(org.springframework.stereotype.Controller)") // 指定したアノテーションがついたクラスのメソッド全てが対象
     public Object startLog(ProceedingJoinPoint jp) throws Throwable {
         System.out.println("メソッド開始: " + jp.getSignature());
 
