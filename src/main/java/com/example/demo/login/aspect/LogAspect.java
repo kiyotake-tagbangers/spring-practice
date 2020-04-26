@@ -34,7 +34,8 @@ public class LogAspect {
 
     // JoinPointにAroundを指定
     // メソッドの実行前後で任意の処理をできる
-    @Around("execution(* *..*.*Controller.*(..))")
+    // @Around("execution(* *..*.*Controller.*(..))")
+    @Around("bean(*Controller)")
     public Object startLog(ProceedingJoinPoint jp) throws Throwable {
         System.out.println("メソッド開始: " + jp.getSignature());
 
