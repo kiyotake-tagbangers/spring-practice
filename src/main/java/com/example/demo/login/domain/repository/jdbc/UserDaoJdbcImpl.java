@@ -26,20 +26,35 @@ public class UserDaoJdbcImpl implements UserDao {
     // Userテーブルにデータを1件insert
     @Override
     public int insertOne(User user) throws DataAccessException {
-        // TODO:
-        return 0;
+        int rowNumber = jdbc.update("INSERT INTO m_user(user_id," +
+                        " password," +
+                        " user_name," +
+                        " birthday," +
+                        " age," +
+                        " marriage," +
+                        " role)" +
+                        " VALUES(?, ?, ?, ?, ?, ?, ?)"
+                , user.getUserId()
+                , user.getPassword()
+                , user.getUserName()
+                , user.getBirthday()
+                , user.getAge()
+                , user.isMarriage()
+                , user.getRole());
+
+        return rowNumber;
     }
 
     // Userテーブルのデータを1件取得
     @Override
-    public User selectOne(String userId) throws DataAccessException{
+    public User selectOne(String userId) throws DataAccessException {
         // TODO:
         return null;
     }
 
     // Userテーブルの全データを取得
     @Override
-    public List<User> selectMany() throws DataAccessException{
+    public List<User> selectMany() throws DataAccessException {
         // TODO:
         return null;
     }

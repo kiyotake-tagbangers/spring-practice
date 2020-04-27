@@ -5,6 +5,9 @@ import java.util.Map;
 
 import com.example.demo.login.domain.model.GroupOrder;
 import com.example.demo.login.domain.model.SignupForm;
+import com.example.demo.login.domain.model.User;
+import com.example.demo.login.domain.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class SignupController {
+
+    @Autowired
+    private UserService userService;
 
     private Map<String, String> radioMarriage;
 
@@ -55,8 +61,30 @@ public class SignupController {
             // GETリクエストのメソッドを呼び出してユーザ登録画面に戻る
             return getSignUp(form, model);
         }
+
+        // formの中身を確認のため出力
         System.out.println(form);
-        return "redirect:/login"; // login.html
+
+        User user = new User();
+
+        user.setUserId(form.getUserId());
+        user.setPassword(form.getPassword());
+        user.setUserName(form.getUserName());
+        user.setBirthday(form.getBirthday());
+        user.setAge(form.getAge());
+        user.setMarriage(form.isMarriage());
+        user.setRole("ROLE_GENERAL");
+
+        // ユーザ登録処理
+        boolean result = userService.insert(user);
+
+        if (result == true) {
+            System.out.println("insert成功");
+        } else {
+            System.out.println("insert失敗");
+        }
+
+        return "redirect:/login";
     }
 
 }
