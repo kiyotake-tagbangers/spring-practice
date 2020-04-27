@@ -56,7 +56,7 @@ public class SignupController {
     @PostMapping("/signup")
     public String postSignUp(@ModelAttribute @Validated(GroupOrder.class) SignupForm form, BindingResult bindingResult, Model model) {
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
 
             // GETリクエストのメソッドを呼び出してユーザ登録画面に戻る
             return getSignUp(form, model);

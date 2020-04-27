@@ -7,7 +7,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDaoJdbcImpl implements UserDao {
@@ -19,8 +22,13 @@ public class UserDaoJdbcImpl implements UserDao {
     // Userテーブルの件数を取得
     @Override
     public int count() throws DataAccessException {
-        // TODO:
-        return 0;
+
+        // 全件取得してカウント
+        // カウントの結果やカラムを1つだけ取得する場合には、
+        // queryForObject を使用し、第1引数にSQL,第2引数に戻り値のオブジェクトのclassを指定
+        int count = jdbc.queryForObject("SELECT COUNT(*) FROM m_user", Integer.class);
+
+        return count;
     }
 
     // Userテーブルにデータを1件insert
@@ -55,8 +63,31 @@ public class UserDaoJdbcImpl implements UserDao {
     // Userテーブルの全データを取得
     @Override
     public List<User> selectMany() throws DataAccessException {
-        // TODO:
-        return null;
+        // m_userテーブルのデータを全件取得
+        List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM m_user");
+
+        // 結果返却用の変数のList
+        List<User> userList = new ArrayList<>();
+
+        // 取得したデータをListに格納
+        for (Map<String, Object> map: getList){
+
+            User user = new User();
+
+            user.setUserId((String)map.get("user_id"));
+            user.setPassword((String)map.get("password"));
+            user.setUserName((String)map.get("user_name"));
+            user.setBirthday((Date) map.get("birthday"));
+
+            // Integerクラスはプリミティブ型intの値をラップするオブジェクト
+            user.setAge((Integer) map.get("age"));
+            user.setMarriage((Boolean) map.get("marriage"));
+            user.setRole((String)map.get("role"));
+
+            userList.add(user);
+        }
+
+        return userList;
     }
 
     // Userテーブルを1件更新
