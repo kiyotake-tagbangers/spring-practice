@@ -56,8 +56,24 @@ public class UserDaoJdbcImpl implements UserDao {
     // Userテーブルのデータを1件取得
     @Override
     public User selectOne(String userId) throws DataAccessException {
-        // TODO:
-        return null;
+
+        // 1件のレコードを取得するには、
+        // queryForMapメソッドを使用する
+        // 第1引数にSQL,第2引数以降にPreparedStatementを指定する
+        Map<String, Object> map = jdbc.queryForMap("SELECT * FROM m_user" +
+                " WHERE user_id = ?", userId);
+
+        User user = new User();
+
+        user.setUserId((String) map.get("user_id")); //ユーザーID
+        user.setPassword((String) map.get("password")); //パスワード
+        user.setUserName((String) map.get("user_name")); //ユーザー名
+        user.setBirthday((Date) map.get("birthday")); //誕生日
+        user.setAge((Integer) map.get("age")); //年齢
+        user.setMarriage((Boolean) map.get("marriage")); //結婚ステータス
+        user.setRole((String) map.get("role")); //ロール
+
+        return user;
     }
 
     // Userテーブルの全データを取得

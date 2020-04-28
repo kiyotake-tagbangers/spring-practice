@@ -44,10 +44,17 @@ public class UserService {
     }
 
     /**
-     * 全件取得用のメソッド
+     * 全件取得用
      */
     public List<User> selectMany() {
 
         return dao.selectMany();
+    }
+
+    /**
+     * 1件取得用
+     */
+    public User selectOne(String useId){
+        return dao.selectOne(useId);
     }
 }
