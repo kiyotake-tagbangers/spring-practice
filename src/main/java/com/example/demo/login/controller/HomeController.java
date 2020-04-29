@@ -4,6 +4,7 @@ import com.example.demo.login.domain.model.SignupForm;
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -128,12 +129,18 @@ public class HomeController {
         user.setAge(form.getAge());
         user.setMarriage(form.isMarriage());
 
-        boolean result = userService.updateOne(user);
+        // DBで例外が発生しても画面を表示する
+        try {
+            boolean result = userService.updateOne(user);
 
-        if (result == true) {
-            model.addAttribute("result", "更新成功");
-        } else {
-            model.addAttribute("result", "更新失敗");
+            if (result == true) {
+                model.addAttribute("result", "更新成功");
+            } else {
+                model.addAttribute("result", "更新失敗");
+            }
+        } catch (DataAccessException e) {
+
+            model.addAttribute("result", "更新失敗(トランザクションテスト)");
         }
 
         // ユーザ一覧画面を表示

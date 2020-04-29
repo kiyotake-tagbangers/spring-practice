@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.FileSystem;
@@ -14,12 +15,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+@Transactional
 @Service
 public class UserService {
 
     @Autowired
-    @Qualifier("UserDaoJdbcImpl") // どのBeanを使用するかを指定
-            UserDao dao;
+    // どのBeanを使用するかを指定
+    @Qualifier("UserDaoJdbcImpl")
+    UserDao dao;
 
     /**
      * リポジトリクラスのinsertOneメソッドを呼び出している

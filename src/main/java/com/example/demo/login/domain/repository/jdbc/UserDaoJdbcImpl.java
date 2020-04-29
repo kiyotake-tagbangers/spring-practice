@@ -78,6 +78,7 @@ public class UserDaoJdbcImpl implements UserDao {
 
     /**
      * Userテーブルの全データを取得
+     *
      * @return
      * @throws DataAccessException
      */
@@ -131,6 +132,11 @@ public class UserDaoJdbcImpl implements UserDao {
                 , user.isMarriage()
                 , user.getUserId());
 
+        if (rowNumber > 0) {
+            throw new DataAccessException("トランザクションテスト") {
+            };
+        }
+
         return rowNumber;
 
     }
@@ -147,6 +153,7 @@ public class UserDaoJdbcImpl implements UserDao {
 
     /**
      * ユーザ一覧データをCSVに出力する
+     *
      * @throws DataAccessException
      */
     @Override
