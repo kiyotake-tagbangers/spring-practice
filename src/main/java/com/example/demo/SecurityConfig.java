@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // リポジトリクラスなどで使用するため、パスワードエンコーダのBeanを定義
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
 
         // パスワードを暗号化、復号するインターフェース PasswordEncoder を実装したもの
         return new BCryptPasswordEncoder();
@@ -87,9 +87,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout") // POSTメソッドでログアウトする場合の設定
                 .logoutSuccessUrl("/login");
 
-        // TODO: 有効にする
         // CSRF対策を無効(一時的)
-        http.csrf().disable();
+        // http.csrf().disable();
     }
 
     @Override
@@ -100,6 +99,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource)
                 .usersByUsernameQuery(USER_SQL)
                 .authoritiesByUsernameQuery(ROLE_SQL)
-        .passwordEncoder(passwordEncoder()); // パスワードの復号
+                .passwordEncoder(passwordEncoder()); // パスワードの復号
     }
 }
