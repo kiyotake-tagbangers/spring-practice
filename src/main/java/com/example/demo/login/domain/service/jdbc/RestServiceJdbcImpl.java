@@ -22,7 +22,15 @@ public class RestServiceJdbcImpl implements RestService {
     //１件登録用メソッド
     @Override
     public boolean insert(User user) {
-        return false;
+
+        int result = dao.insertOne(user);
+
+        if (result == 0) {
+            return false;
+        } else {
+            // 登録に成功していればtrue
+            return true;
+        }
     }
 
     //１件検索用メソッド
