@@ -47,9 +47,9 @@ public class RestServiceJdbcImpl implements RestService {
 
     //１件更新用メソッド
     @Override
-    public boolean updateOne(User user) {
+    public boolean updateOne(User userId) {
 
-        int result = dao.updateOne(user);
+        int result = dao.updateOne(userId);
 
         if (result == 0){
             return false;
@@ -60,7 +60,14 @@ public class RestServiceJdbcImpl implements RestService {
 
     //１件削除用メソッド
     @Override
-    public boolean delete(String userId) {
-        return false;
+    public boolean deleteOne(String userId) {
+
+        int result = dao.deleteOne(userId);
+
+        if (result == 0){
+            return false;
+        } else {
+            return true;
+        }
     }
 }
