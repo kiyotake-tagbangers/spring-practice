@@ -86,19 +86,19 @@ public class UserDaoJdbcImpl implements UserDao {
         List<User> userList = new ArrayList<>();
 
         // 取得したデータをListに格納
-        for (Map<String, Object> map: getList){
+        for (Map<String, Object> map : getList) {
 
             User user = new User();
 
-            user.setUserId((String)map.get("user_id"));
-            user.setPassword((String)map.get("password"));
-            user.setUserName((String)map.get("user_name"));
+            user.setUserId((String) map.get("user_id"));
+            user.setPassword((String) map.get("password"));
+            user.setUserName((String) map.get("user_name"));
             user.setBirthday((Date) map.get("birthday"));
 
             // Integerクラスはプリミティブ型intの値をラップするオブジェクト
             user.setAge((Integer) map.get("age"));
             user.setMarriage((Boolean) map.get("marriage"));
-            user.setRole((String)map.get("role"));
+            user.setRole((String) map.get("role"));
 
             userList.add(user);
         }
@@ -109,8 +109,24 @@ public class UserDaoJdbcImpl implements UserDao {
     // Userテーブルを1件更新
     @Override
     public int updateOne(User user) throws DataAccessException {
-        // TODO:
-        return 0;
+
+        int rowNumber = jdbc.update("UPDATE m_user"
+                        + " SET"
+                        + " password = ?,"
+                        + " user_name = ?,"
+                        + " birthday = ?,"
+                        + " age = ?,"
+                        + " marriage = ?"
+                        + " WHERE user_id = ?"
+                , user.getPassword()
+                , user.getUserName()
+                , user.getBirthday()
+                , user.getAge()
+                , user.isMarriage()
+                , user.getUserId());
+
+        return rowNumber;
+
     }
 
     // Userテーブルを1件削除
