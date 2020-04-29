@@ -4,6 +4,9 @@ import com.example.demo.login.domain.model.SignupForm;
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +28,7 @@ public class HomeController {
     // 結婚ステータス用のラジオボタン用変数
     private Map<String, String> radioMarriage;
 
-    private Map<String, String> initRadioMarriage(){
+    private Map<String, String> initRadioMarriage() {
 
         Map<String, String> radio = new LinkedHashMap<>();
 
@@ -35,7 +39,7 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String getHome(Model model){
+    public String getHome(Model model) {
 
         // <div th:include="__${contents}__"></div> で使用する
         model.addAttribute("contents", "login/home :: home_contents");
@@ -45,11 +49,12 @@ public class HomeController {
 
     /**
      * ユーザ一覧画面のGET用
+     *
      * @param model
      * @return
      */
     @GetMapping("/userList")
-    public String getUserList(Model model){
+    public String getUserList(Model model) {
 
         // コンテンツ部分にユーザ一覧を表示するための文字列を登録
         model.addAttribute("contents", "login/userList :: userList_contents");
@@ -69,13 +74,14 @@ public class HomeController {
 
     /**
      * ユーザ詳細のGET用
+     *
      * @param form
      * @param model
      * @param userId
      * @return
      */
     @GetMapping("/userDetail/{id:.+}")
-    public String getUserDetail(@ModelAttribute SignupForm form, Model model, @PathVariable("id") String userId){
+    public String getUserDetail(@ModelAttribute SignupForm form, Model model, @PathVariable("id") String userId) {
 
         System.out.println("userId = " + userId);
 
@@ -103,13 +109,14 @@ public class HomeController {
 
     /**
      * ユーザの更新POST用
+     *
      * @param form
      * @param model
      * @return
      */
     // value = ボタン名 と params属性でどのメソッドを実行するか判定
     @PostMapping(value = "/userDetail", params = "update")
-    public String postUserDetailUpdate(@ModelAttribute SignupForm form, Model model){
+    public String postUserDetailUpdate(@ModelAttribute SignupForm form, Model model) {
         System.out.println("更新ボタンの処理");
 
         User user = new User();
@@ -123,7 +130,7 @@ public class HomeController {
 
         boolean result = userService.updateOne(user);
 
-        if (result == true){
+        if (result == true) {
             model.addAttribute("result", "更新成功");
         } else {
             model.addAttribute("result", "更新失敗");
@@ -135,6 +142,7 @@ public class HomeController {
 
     /**
      * ユーザ削除POST用
+     *
      * @param form
      * @param model
      * @return
@@ -146,7 +154,7 @@ public class HomeController {
 
         boolean result = userService.deleteOne(form.getUserId());
 
-        if (result == true){
+        if (result == true) {
             model.addAttribute("result", "削除成功");
         } else {
             model.addAttribute("result", "削除失敗");
@@ -158,10 +166,11 @@ public class HomeController {
 
     /**
      * ログアウト用
+     *
      * @return
      */
     @PostMapping("/logout")
-    public String getLogout(){
+    public String getLogout() {
 
         return "redirect:/login";
     }
@@ -170,9 +179,28 @@ public class HomeController {
      * ユーザ一覧のCSV出力用
      */
     @GetMapping("/userList/csv")
-    public String getUserListCsv(Model model){
-        // TODO:
-        return getUserList(model);
+    // メソッドの戻り値を、ResponseEntity型にすると
+    // htmlでなく<>で指定したbyte型の配列を呼び出し元に返却できる
+    public ResponseEntity<byte[]> getUserListCsv(Model model) {
+
+        // CSV出力
+        userService.userCsvOut();
+
+        byte[] bytes = null;
+
+        try {
+
+            bytes = userService.getFile("sample.csv");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content-Type", "text/csv; charset=UTF-8");
+        header.setContentDispositionFormData("filename", "sample.csv");
+
+        return new ResponseEntity<>(bytes, header, HttpStatus.OK);
     }
 
 }

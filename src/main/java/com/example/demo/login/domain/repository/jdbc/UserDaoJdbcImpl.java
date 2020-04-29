@@ -145,10 +145,18 @@ public class UserDaoJdbcImpl implements UserDao {
 
     }
 
-    // SQL取得結果をサーバにCSVで保存する
+    /**
+     * ユーザ一覧データをCSVに出力する
+     * @throws DataAccessException
+     */
     @Override
     public void userCsvOut() throws DataAccessException {
-        // TODO:
+
+        String sql = "SELECT * FROM m_user";
+
+        UserRowCallBackHandler handler = new UserRowCallBackHandler();
+
+        jdbc.query(sql, handler);
     }
 
 }
