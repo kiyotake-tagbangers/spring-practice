@@ -12,7 +12,7 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    @Qualifier("UserDaoJdbcImpl2") // どのBeanを使用するかを指定
+    @Qualifier("UserDaoJdbcImpl3") // どのBeanを使用するかを指定
     UserDao dao;
 
     /**
