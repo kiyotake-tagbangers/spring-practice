@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**").permitAll() // webjarsへアクセス許可
                 .antMatchers("/css/**").permitAll() // cssへアクセス許可
                 .antMatchers("/login").permitAll() // ログインページは直リンクを許可
+                .antMatchers("/admin").hasAuthority("ROLE_ADMIN") // 認可を設定
                 .anyRequest().authenticated(); // それ以外はログインしないと見れない
 
         // ログイン処理
