@@ -53,4 +53,29 @@ public class UserRestController {
 
         return str;
     }
+
+    @PutMapping("/rest/update")
+    public String putUserOne(@RequestBody User user){
+
+        boolean result = service.updateOne(user);
+
+        String str = "";
+
+        if (result == true) {
+            str = "{\"result\":\"ok\"}";
+        } else {
+            str = "{\"result\":\"error\"}";
+        }
+
+        // 事前確認
+        // curl http://localhost:8080/rest/get/admin@xxx.co.jp
+
+        // PUT処理(userNameを変更)
+        // curl http://localhost:8080/rest/update -X PUT -H "Content-Type: application/json" -d "{\"userId\":\"admin@xxx.co.jp\", \"password\":\"pass\", \"userName\":\"Kanri Taro\", \"birthday\":\"1990-01-01\", \"age\":\"28\", \"marriage\":\"false\", \"role\":\"ROLE_ADMIN\"}"
+
+        // 事後確認
+        // curl http://localhost:8080/rest/get/admin@xxx.co.jp
+
+        return str;
+    }
 }
