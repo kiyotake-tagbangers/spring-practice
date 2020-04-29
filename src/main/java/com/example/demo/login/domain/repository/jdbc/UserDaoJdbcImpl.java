@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+@Repository("UserDaoJdbcImpl") // Bean名をセット
 public class UserDaoJdbcImpl implements UserDao {
 
     // Springが用意しているため、すでにBean定義がされている
@@ -76,10 +76,16 @@ public class UserDaoJdbcImpl implements UserDao {
         return user;
     }
 
-    // Userテーブルの全データを取得
+    /**
+     * Userテーブルの全データを取得
+     * @return
+     * @throws DataAccessException
+     */
     @Override
     public List<User> selectMany() throws DataAccessException {
+
         // m_userテーブルのデータを全件取得
+        // select文で取得した結果をMapから取り出して、Userクラスのインスタンスにセット
         List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM m_user");
 
         // 結果返却用の変数のList

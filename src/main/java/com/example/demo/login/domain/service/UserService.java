@@ -3,6 +3,7 @@ package com.example.demo.login.domain.service;
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class UserService {
 
     @Autowired
+    @Qualifier("UserDaoJdbcImpl2") // どのBeanを使用するかを指定
     UserDao dao;
 
     /**
@@ -71,13 +73,13 @@ public class UserService {
         return result;
     }
 
-    public boolean deleteOne(String userId){
+    public boolean deleteOne(String userId) {
 
         int rowNumber = dao.deleteOne(userId);
 
         boolean result = false;
 
-        if(rowNumber > 0 ) {
+        if (rowNumber > 0) {
             result = true;
         }
 
