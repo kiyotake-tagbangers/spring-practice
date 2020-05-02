@@ -19,8 +19,8 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
     // どのBeanを使用するかを指定
+    @Autowired
     @Qualifier("UserDaoJdbcImpl")
     UserDao dao;
 
